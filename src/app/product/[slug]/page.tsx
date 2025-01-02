@@ -1,7 +1,7 @@
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
-import { BsCart3 } from "react-icons/bs";
+import AddToCart from "@/components/AddToCart";
 
 interface ImageAsset {
   asset: {
@@ -17,6 +17,7 @@ interface Data {
   description: string;
   image: ImageAsset;
   slug: string;
+  price_id: string;
 }
 
 async function getData(slug: string) {
@@ -27,6 +28,7 @@ async function getData(slug: string) {
     description,
     image,
     "slug":slug.current,
+    price_id,
 }`;
   const data = await client.fetch(query);
   return data;
@@ -67,10 +69,15 @@ export default async function ProductDetailPage({
           <h2 className="my-10 md:my-5 lg:my-10 text-gray-600 font-medium">
             {data.description}
           </h2>
-          <button className="flex items-center justify-center bg-customTeal rounded-md px-4 py-4 md:px-2 md:py-2 lg:px-4 lg:py-4 gap-2 text-white font-medium md:font-normal lg:font-medium">
-            <BsCart3 className="font-bold w-5 h-5" />
-            Add To Cart
-          </button>
+          <AddToCart
+            currency="USD"
+            name={data.name}
+            description={data.description}
+            image={data.image}
+            price={data.price}
+            key={data._id}
+            price_id={data.price_id}
+          />
         </div>
       </div>
     </div>

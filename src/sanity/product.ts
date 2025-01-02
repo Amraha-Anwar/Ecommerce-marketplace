@@ -19,6 +19,11 @@ export const product = {
       type: "number",
     },
     {
+      name:"price_id",
+      title: "Stripe Price ID",
+      type: "string",
+    },
+    {
       name: "description",
       title: "Product Description",
       type: "text",
