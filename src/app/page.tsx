@@ -5,6 +5,8 @@ import Categories from "@/components/Topcategories"
 import Popular from "@/components/Popularstyles"
 import OurProducts from "@/components/HomeProducts"
 
+export const dynamic = "force-dynamic";
+
 export default function Home(){
     return (
         <>

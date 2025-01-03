@@ -1,7 +1,7 @@
 import { client } from "@/sanity/lib/client";
 import Image from "next/image";
 import Link from "next/link";
-import { BaggageClaim } from "lucide-react";
+import AddToCart2 from "@/components/AddToCart2";
 
 interface Items {
   _id: string;
@@ -47,6 +47,17 @@ export default async function OurProducts() {
                     <h1 className=" text-customTeal pt-2">{item.name}</h1>
                   </Link>
                   <p className="text-lg font-medium">${item.price}</p>
+                </div>
+                <div>
+                  {/* Passing required props to AddToCart2 */}
+                  <AddToCart2
+                    name={item.name}
+                    description={`High-quality ${item.name}`}
+                    price={item.price}
+                    currency="USD" // Assuming USD as the default currency
+                    image={item.imageURL}
+                    price_id={item._id} // Using _id as price_id for simplicity
+                  />
                 </div>
               </div>
             ))}

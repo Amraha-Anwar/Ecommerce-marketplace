@@ -16,11 +16,13 @@ export default function ShoppingCartModal() {
     handleCartClick,
     cartDetails,
     removeItem,
+    incrementItem,
+    decrementItem,
     totalPrice,
     redirectToCheckout,
   } = useShoppingCart();
 
-  async function handleCheckout(event: any) {
+  async function handleCheckout(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     try {
       const result = await redirectToCheckout();
@@ -28,9 +30,10 @@ export default function ShoppingCartModal() {
         console.log("result");
       }
     } catch (error) {
-      console.log(error);
+      console.error("Checkout Error:", error);
     }
   }
+
   return (
     <Sheet open={shouldDisplayCart} onOpenChange={() => handleCartClick()}>
       <SheetContent className="sm:max-w-lg w-[90vw]">
@@ -41,7 +44,7 @@ export default function ShoppingCartModal() {
           <div className="mt-8 flex-1 overflow-y-auto">
             <ul className="-my-6 divide-y divide-gray-200">
               {cartCount === 0 ? (
-                <h1 className="py-6">You dont have any items yet</h1>
+                <h1 className="py-6">{`You don't have any items yet`}</h1>
               ) : (
                 <>
                   {Object.values(cartDetails ?? {}).map((entry) => (
@@ -65,7 +68,21 @@ export default function ShoppingCartModal() {
                           </p>
                         </div>
                         <div className="flex flex-1 items-end justify-between text-sm">
-                          <p className="text-gray-500">QTY: {entry.quantity}</p>
+                          <div className="flex items-center space-x-2">
+                            <button
+                              className="px-2 py-1 bg-gray-200 rounded-md"
+                              onClick={() => decrementItem(entry.id)}
+                            >
+                              -
+                            </button>
+                            <p className="text-gray-500">{entry.quantity}</p>
+                            <button
+                              className="px-2 py-1 bg-gray-200 rounded-md"
+                              onClick={() => incrementItem(entry.id)}
+                            >
+                              +
+                            </button>
+                          </div>
                           <div>
                             <button
                               type="button"
