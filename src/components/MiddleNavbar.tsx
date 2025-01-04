@@ -24,16 +24,16 @@ export default function MiddleNavbar() {
             <h1 className="text-xl hidden sm:block">Comforty</h1>
           </div>
           {/* cart button */}
-          <div className="bg-white lg:px-3 lg:py-3 px-1 py-1">
+          <div className="bg-white rounded-lg lg:px-3 px-1 py-1">
             <button
-              className="relative flex items-center gap-2 sm:gap-3 rounded-[10px] px-2 py-2 lg:px-3 lg:py-3"
+              className="relative flex items-center gap-2 sm:gap-1 rounded-[10px] px-2 py-2 lg:px-3 lg:py-2"
               onClick={() => handleCartClick()}
             >
               <BsCartDash className="w-5 h-6" />
               {/* Cart text for large screens */}
               <span className="hidden sm:block">Cart</span>
               {/* Badge to show cart count */}
-              <span className="absolute -top-2 -right-2 bg-customDarkBlue text-white rounded-full px-2 py-0 text-xs">
+              <span className="absolute -top-2 -right-2 bg-customDarkBlue text-white rounded-full px-2 py-1 text-xs">
                 {cartCount || 0}
               </span>
             </button>

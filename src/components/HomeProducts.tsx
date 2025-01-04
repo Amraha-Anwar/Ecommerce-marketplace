@@ -42,7 +42,8 @@ export default async function OurProducts() {
                     className="w-full h-full object-cover object-center"
                   />
                 </div>
-                <div className="text-center">
+              <div className="mt-4 flex justify-between">
+                <div>
                   <Link href={`/product/${item.slug}`}>
                     <h1 className=" text-customTeal pt-2">{item.name}</h1>
                   </Link>
@@ -58,6 +59,7 @@ export default async function OurProducts() {
                     image={item.imageURL}
                     price_id={item._id} // Using _id as price_id for simplicity
                   />
+                </div>
                 </div>
               </div>
             ))}

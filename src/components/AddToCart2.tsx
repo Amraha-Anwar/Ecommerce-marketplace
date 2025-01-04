@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { BsCart3 } from "react-icons/bs";
+import { BaggageClaim } from "lucide-react";
 import { useShoppingCart } from "use-shopping-cart";
 
 export interface CartProduct {
@@ -34,10 +34,9 @@ export default function AddToCart2({
   return (
     <button
       onClick={() => addItem(product)}
-      className="flex items-center justify-center bg-customTeal rounded-md px-4 py-4 md:px-2 md:py-2 lg:px-4 lg:py-4 gap-2 text-white font-medium md:font-normal lg:font-medium"
+      className="flex items-center justify-center bg-customGray text-black hover:bg-customTeal rounded-md px-4 py-4 md:px-2 md:py-2 lg:px-4 lg:py-4 hover:text-white"
     >
-      <BsCart3 className="font-bold w-5 h-5" />
-      Add To Cart
+      <BaggageClaim className="font-bold w-6 h-6" />
     </button>
   );
 }
