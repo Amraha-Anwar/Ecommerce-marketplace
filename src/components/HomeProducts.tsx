@@ -1,12 +1,10 @@
-"use client"
-
+"use client";
 
 import { client } from "@/sanity/lib/client";
 import Image from "next/image";
 import Link from "next/link";
 import AddToCart2 from "@/components/AddToCart2";
 import { useState, useEffect } from "react";
-import toast from "react-hot-toast";
 
 interface Items {
   _id: string;
@@ -44,14 +42,10 @@ export default function OurProducts() {
   const handleAddToCart = (item: Items) => {
     if (item.stock > 0) {
       // Handle adding in-stock products to the cart
-      toast.success(`${item.name} has been added to your cart!`, {
-        duration: 3000,
-      });
+      console.log(`${item.name} has been added to your cart!`);
     } else {
       // Handle out-of-stock products
-      toast.error(`${item.name} is out of stock.`, {
-        duration: 3000,
-      });
+      console.log(`${item.name} is out of stock.`);
     }
   };
 
@@ -65,21 +59,19 @@ export default function OurProducts() {
           {items.map((item) => (
             <div key={item._id} className="group relative">
               <div className="w-full overflow-hidden rounded-md transition-transform duration-200 hover:scale-105">
-              <Link href={`/product/${item.slug}`}>
-                <Image
-                  src={item.imageURL}
-                  alt={item.name}
-                  width={600}
-                  height={600}
-                  className="w-full h-full object-cover object-center"
-                />
+                <Link href={`/product/${item.slug}`}>
+                  <Image
+                    src={item.imageURL}
+                    alt={item.name}
+                    width={600}
+                    height={600}
+                    className="w-full h-full object-cover object-center"
+                  />
                 </Link>
               </div>
               <div className="mt-4 flex justify-between">
                 <div>
-                  
-                    <h1 className="text-customTeal pt-2">{item.name}</h1>
-                  
+                  <h1 className="text-customTeal pt-2">{item.name}</h1>
                   <p className="text-lg font-medium">${item.price}</p>
                 </div>
                 <div className="relative">

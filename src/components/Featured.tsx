@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import AddToCart2 from "@/components/AddToCart2";
 import { useState, useEffect } from "react";
-import toast from "react-hot-toast";
 
 interface Product {
   _id: string;
@@ -42,17 +41,9 @@ export default function FeaturedProducts() {
   }, []);
 
   const handleAddToCart = (product: Product) => {
+    // Ensure the function is only called once
     if (product.stock > 0) {
-      // Adding in-stock product to cart
-      toast.success(`${product.name} has been added to your cart!`, {
-        duration: 3000,
-      });
       console.log("Product added to cart:", product);
-    } else {
-      // Showing out-of-stock message only
-      toast.error(`${product.name} is out of stock.`, {
-        duration: 3000,
-      });
     }
   };
 
@@ -66,25 +57,25 @@ export default function FeaturedProducts() {
           <div key={product._id} className="group relative">
             <div className="aspect-square w-full overflow-hidden rounded-md hover:scale-105 transition-transform duration-300 lg:h-80">
               <Link href={`/product/${product.slug}`}>
-              <Image
-                src={product.imageURL}
-                alt={product.name}
-                width={600}
-                height={600}
-                className="w-full h-full object-cover object-center"
-              /></Link>
+                <Image
+                  src={product.imageURL}
+                  alt={product.name}
+                  width={600}
+                  height={600}
+                  className="w-full h-full object-cover object-center"
+                />
+              </Link>
             </div>
             <div className="mt-4 flex justify-between">
               <div>
-                  <h1 className="text-customTeal pt-2">{product.name}</h1>
-                
+                <h1 className="text-customTeal pt-2">{product.name}</h1>
                 <p className="text-lg font-medium">${product.price}</p>
               </div>
               <div className="relative">
                 <button
                   onClick={() => handleAddToCart(product)} // Ensure this logic is correct
                   disabled={product.stock === 0} // Disable button if out of stock
-                  className={` ${
+                  className={`${
                     product.stock === 0 ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >

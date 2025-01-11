@@ -76,11 +76,11 @@ export default function ProductDetails({ product }: { product: Product }) {
         </h2>
 
         {product.stock > 0 ? (
-          <p className="text-green-500 font-semibold mb-3">
-            Quantity in stock: {product.stock}
+          <p className="text-gray-500 font-semibold mb-3 text-sm">
+            Availability:<span className="text-green-500 font-semibold mb-3 text-sm"> In Stock </span>
           </p>
         ) : (
-          <p className="text-red-500 font-semibold">Out of Stock</p>
+          <p className="text-gray-500 font-semibold text-sm">Availability:<span className="text-red-500 font-semibold text-sm"> Out of Stock</span></p>
         )}
 
         {product.stock > 0 ? (
