@@ -2,6 +2,7 @@
 
 import { BaggageClaim } from "lucide-react";
 import { useShoppingCart } from "use-shopping-cart";
+import toast from "react-hot-toast";
 
 export interface CartProduct {
   name: string;
@@ -31,9 +32,14 @@ export default function AddToCart2({
     price_id: price_id,
   };
 
+  const handleAddToCart = () => {
+    addItem(product);
+    toast.success(`${name} has been added to your cart!`);
+  };
+
   return (
     <button
-      onClick={() => addItem(product)}
+      onClick={handleAddToCart}
       className="flex items-center justify-center bg-customGray text-black hover:bg-customTeal rounded-md px-4 py-4 md:px-2 md:py-2 lg:px-4 lg:py-4 hover:text-white"
     >
       <BaggageClaim className="font-bold w-6 h-6" />

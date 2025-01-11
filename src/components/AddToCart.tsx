@@ -1,4 +1,5 @@
 "use client";
+
 import { BsCart3 } from "react-icons/bs";
 import { useShoppingCart } from "use-shopping-cart";
 import { urlFor } from "@/sanity/lib/image";
@@ -17,6 +18,7 @@ export interface CartProduct {
   currency: string;
   image: ImageAsset;
   price_id: string;
+  onAddToCart?: () => void;
 }
 
 export default function AddToCart({
@@ -26,6 +28,7 @@ export default function AddToCart({
   price,
   currency,
   price_id,
+  onAddToCart,
 }: CartProduct) {
   const { addItem } = useShoppingCart();
   const product = {
@@ -37,9 +40,16 @@ export default function AddToCart({
     price_id: price_id,
   };
 
+  const handleAddToCart = () => {
+    addItem(product);
+    if (onAddToCart) {
+      onAddToCart();
+    }
+  };
+
   return (
     <button
-      onClick={() => addItem(product)}
+      onClick={handleAddToCart}
       className="flex items-center justify-center bg-customTeal rounded-md px-4 py-4 md:px-2 md:py-2 lg:px-4 lg:py-4 gap-2 text-white font-medium md:font-normal lg:font-medium"
     >
       <BsCart3 className="font-bold w-5 h-5" />

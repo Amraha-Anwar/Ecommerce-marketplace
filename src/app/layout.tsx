@@ -5,8 +5,9 @@ import TopNavbar from "@/components/TopNavbar";
 import MiddleNavbar from "@/components/MiddleNavbar";
 import BottomNavbar from "@/components/BottomNavbar";
 import Footer from "@/components/Footer";
-import  CartProvider from "@/components/Provider";
+import CartProvider from "@/components/Provider";
 import ShoppingCartModal from "@/components/ShoppingCartModel";
+import { Toaster } from "react-hot-toast"; // Import Toaster
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -35,15 +36,23 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <CartProvider>
-          <TopNavbar/>
-        <MiddleNavbar/>
-        <BottomNavbar/>
-        <ShoppingCartModal/>
-        {children}
-        <Footer/>
+          {/* Adding Toaster globally */}
+          <Toaster position="top-center" reverseOrder={false} />
+
+          {/* Navbar components */}
+          <TopNavbar />
+          <MiddleNavbar />
+          <BottomNavbar />
+
+          {/* Shopping cart modal */}
+          <ShoppingCartModal />
+
+          {/* Main content */}
+          {children}
+
+          <Footer />
         </CartProvider>
       </body>
     </html>
   );
 }
-

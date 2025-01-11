@@ -19,7 +19,7 @@ export const product = {
       type: "number",
     },
     {
-      name:"price_id",
+      name: "price_id",
       title: "Stripe Price ID",
       type: "string",
     },
@@ -35,6 +35,10 @@ export const product = {
       options: {
         source: "name",
       },
+    },
+    { name: "stock",
+      type: "number",
+      title: "Stock",
     },
   ],
 };
