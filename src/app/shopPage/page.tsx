@@ -14,6 +14,7 @@ interface Items {
   slug: string;
   imageURL: string;
   stock: number;
+  price_id: string;
 }
 
 async function getOurProducts() {
@@ -21,6 +22,7 @@ async function getOurProducts() {
     _id,
     name,
     price,
+    price_id,
     "slug": slug.current,
     "imageURL": image.asset->url,
     stock
@@ -92,7 +94,7 @@ export default function OurProducts() {
                         price={item.price}
                         currency="USD"
                         image={item.imageURL}
-                        price_id={item._id}
+                        price_id={item.price_id}
                       />
                     </button>
                     {item.stock === 0 && (

@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/sheet";
 import { useShoppingCart } from "use-shopping-cart";
 import Image from "next/image";
+import { MouseEvent } from "react"; // Import MouseEvent from React
 
 export default function ShoppingCartModal() {
   const {
@@ -22,7 +23,7 @@ export default function ShoppingCartModal() {
     redirectToCheckout,
   } = useShoppingCart();
 
-  async function handleCheckout(event:any) {
+  async function handleCheckout(event: MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     try {
       const result = await redirectToCheckout();

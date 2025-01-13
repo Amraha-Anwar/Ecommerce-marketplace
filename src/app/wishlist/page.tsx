@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { urlFor } from "@/sanity/lib/image";
 import Link from "next/link";
+import Image from "next/image"
 
 
 interface ImageAsset {
@@ -48,10 +49,12 @@ export default function WishlistPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {wishlist.map((item) => (
           <div key={item._id} className="border p-4 rounded-md">
-            <img
+            <Image
               src={urlFor(item.image).url()}
               alt={item.name}
               className="w-full h-48 object-cover rounded-md"
+              width={200}
+              height={200}
             />
             <h2 className="text-xl font-bold mt-4">{item.name}</h2>
             <p className="text-gray-500 mt-2">${item.price}.00</p>

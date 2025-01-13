@@ -13,6 +13,7 @@ interface Product {
   slug: string;
   imageURL: string;
   stock: number;
+  price_id:string,
 }
 
 async function getFeaturedProducts() {
@@ -22,7 +23,8 @@ async function getFeaturedProducts() {
     price,
     "slug": slug.current,
     "imageURL": image.asset->url,
-    stock
+    stock,
+    price_id
   }`;
   const products = await client.fetch(query);
   return products;
@@ -85,7 +87,7 @@ export default function FeaturedProducts() {
                     price={product.price}
                     currency="USD"
                     image={product.imageURL}
-                    price_id={product._id}
+                    price_id={product.price_id}
                   />
                 </button>
                 {product.stock === 0 && (
