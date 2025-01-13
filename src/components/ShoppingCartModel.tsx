@@ -22,7 +22,7 @@ export default function ShoppingCartModal() {
     redirectToCheckout,
   } = useShoppingCart();
 
-  async function handleCheckout(event: React.MouseEvent<HTMLButtonElement>) {
+  async function handleCheckout(event:any) {
     event.preventDefault();
     try {
       const result = await redirectToCheckout();
@@ -30,7 +30,7 @@ export default function ShoppingCartModal() {
         console.log("result");
       }
     } catch (error) {
-      console.error("Checkout Error:", error);
+      console.log("Checkout Error:", error);
     }
   }
 

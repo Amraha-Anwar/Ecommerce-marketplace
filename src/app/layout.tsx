@@ -25,9 +25,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <CartProvider>
+
     <html lang="en" className={montserrat.className}>
       <body>
-        <CartProvider>
           {/* Adding Toaster globally */}
           <Toaster position="top-center" reverseOrder={false} />
 
@@ -43,8 +44,9 @@ export default function RootLayout({
           {children}
 
           <Footer />
-        </CartProvider>
       </body>
     </html>
+    </CartProvider>
+
   );
 }
