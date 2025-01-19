@@ -9,23 +9,23 @@ import AddToCart2 from "@/components/AddToCart2";
 
 interface Items {
   _id: string;
-  name: string;
+  title: string;
   price: number;
   slug: string;
   imageURL: string;
-  stock: number;
+  inventory: number;
   price_id: string;
 }
 
 async function getOurProducts() {
-  const query = `*[_type == "product"]{
+  const query = `*[_type == "products"] [0...8] {
     _id,
-    name,
+    title,
     price,
     price_id,
     "slug": slug.current,
     "imageURL": image.asset->url,
-    stock
+    inventory
   }`;
   const items = await client.fetch(query);
   return items;
@@ -43,12 +43,12 @@ export default function OurProducts() {
   }, []);
 
   const handleAddToCart = (item: Items) => {
-    if (item.stock > 0) {
-      toast.success(`${item.name} has been added to your cart!`, {
+    if (item.inventory > 0) {
+      toast.success(`${item.title} has been added to your cart!`, {
         duration: 3000,
       });
     } else {
-      toast.error(`${item.name} is out of stock.`, {
+      toast.error(`${item.title} is out of stock.`, {
         duration: 3000,
       });
     }
@@ -68,7 +68,7 @@ export default function OurProducts() {
                   <Link href={`/product/${item.slug}`}>
                     <Image
                       src={item.imageURL}
-                      alt={item.name}
+                      alt={item.title}
                       width={600}
                       height={600}
                       className="w-full h-full object-cover object-center"
@@ -77,27 +77,27 @@ export default function OurProducts() {
                 </div>
                 <div className="mt-4 flex justify-between">
                   <div>
-                    <h1 className="text-customTeal pt-2">{item.name}</h1>
+                    <h1 className="text-customTeal pt-2">{item.title}</h1>
                     <p className="text-lg font-medium">${item.price}</p>
                   </div>
                   <div className="relative">
                     <button
                       onClick={() => handleAddToCart(item)}
-                      disabled={item.stock === 0}
+                      disabled={item.inventory === 0}
                       className={` ${
-                        item.stock === 0 ? "opacity-50 cursor-not-allowed" : ""
+                        item.inventory === 0 ? "opacity-50 cursor-not-allowed" : ""
                       }`}
                     >
                       <AddToCart2
-                        name={item.name}
-                        description={`High-quality ${item.name}`}
+                        name={item.title}
+                        description={`High-quality ${item.title}`}
                         price={item.price}
                         currency="USD"
                         image={item.imageURL}
                         price_id={item.price_id}
                       />
                     </button>
-                    {item.stock === 0 && (
+                    {item.inventory === 0 && (
                       <div className="absolute bottom-0 left-0 w-full bg-black text-white text-xs py-3 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         Out of Stock
                       </div>

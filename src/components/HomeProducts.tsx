@@ -8,24 +8,28 @@ import { useState, useEffect } from "react";
 
 interface Items {
   _id: string;
-  name: string;
+  title: string;
   price: number;
   slug: string;
   imageURL: string;
-  stock: number;
+  inventory: number;
   price_id: string;
+  badge?: string; // Add badge field to the interface
+  priceWithoutDiscount?: number; // Add priceWithoutDiscount field to the interface
 }
 
 async function getOurProducts() {
-  const query = `*[_type == "product"]{
-  _id,
-  name,
-  price,
-  price_id,
-  "slug": slug.current,
-  "imageURL": image.asset->url,
-  stock // Make sure to fetch stock information
-}`;
+  const query = `*[_type == "products"] | order(price asc) [0...8] {
+    _id,
+    title,
+    price,
+    price_id,
+    "slug": slug.current,
+    "imageURL": image.asset->url,
+    inventory,
+    badge, 
+    priceWithoutDiscount 
+  }`;
   const items = await client.fetch(query);
   return items;
 }
@@ -42,12 +46,12 @@ export default function OurProducts() {
   }, []);
 
   const handleAddToCart = (item: Items) => {
-    if (item.stock > 0) {
+    if (item.inventory > 0) {
       // Handle adding in-stock products to the cart
-      console.log(`${item.name} has been added to your cart!`);
+      console.log(`${item.title} has been added to your cart!`);
     } else {
       // Handle out-of-stock products
-      console.log(`${item.name} is out of stock.`);
+      console.log(`${item.title} is out of stock.`);
     }
   };
 
@@ -64,36 +68,57 @@ export default function OurProducts() {
                 <Link href={`/product/${item.slug}`}>
                   <Image
                     src={item.imageURL}
-                    alt={item.name}
+                    alt={item.title}
                     width={600}
                     height={600}
                     className="w-full h-full object-cover object-center"
                   />
                 </Link>
+                {/* Badge */}
+                {item.badge && (
+                  <div
+                    className={`absolute top-2 left-2 text-white text-xs px-2 py-1 rounded-md ${
+                      item.badge === "New"
+                        ? "bg-green-600"
+                        : item.badge === "Sales"
+                        ? "bg-orange-500"
+                        : "bg-gray-600"
+                    }`}
+                  >
+                    {item.badge}
+                  </div>
+                )}
               </div>
               <div className="mt-4 flex justify-between">
                 <div>
-                  <h1 className="text-customTeal pt-2">{item.name}</h1>
-                  <p className="text-lg font-medium">${item.price}</p>
+                  <h1 className="text-customTeal pt-2">{item.title}</h1>
+                  <div className="flex items-center gap-2">
+                    <p className="text-lg font-medium">${item.price}</p>
+                    {item.priceWithoutDiscount && (
+                      <p className="text-gray-500 line-through ">
+                        ${item.priceWithoutDiscount}
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <div className="relative">
                   <button
                     onClick={() => handleAddToCart(item)}
-                    disabled={item.stock === 0}
+                    disabled={item.inventory === 0}
                     className={` ${
-                      item.stock === 0 ? "opacity-50 cursor-not-allowed" : ""
+                      item.inventory === 0 ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                   >
                     <AddToCart2
-                      name={item.name}
-                      description={`High-quality ${item.name}`}
+                      name={item.title}
+                      description={`High-quality ${item.title}`}
                       price={item.price}
                       currency="USD"
                       image={item.imageURL}
                       price_id={item.price_id}
                     />
                   </button>
-                  {item.stock === 0 && (
+                  {item.inventory === 0 && (
                     <div className="absolute bottom-0 left-0 w-full bg-black text-white text-xs py-3 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       Out of Stock
                     </div>

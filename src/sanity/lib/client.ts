@@ -5,4 +5,5 @@ export const client = createClient({
   dataset: "production",
   apiVersion: "2024-12-28",
   useCdn: true, // Set to false if statically generating pages, using ISR or tag-based revalidation
+  
 })

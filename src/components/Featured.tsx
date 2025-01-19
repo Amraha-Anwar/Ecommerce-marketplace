@@ -8,23 +8,27 @@ import { useState, useEffect } from "react";
 
 interface Product {
   _id: string;
-  name: string;
+  title: string;
   price: number;
   slug: string;
   imageURL: string;
-  stock: number;
-  price_id:string,
+  inventory: number;
+  price_id: string;
+  badge?: string;
+  priceWithoutDiscount?: number; 
 }
 
 async function getFeaturedProducts() {
-  const query = `*[_type == "product"][0...4] | order(_createdAt asc) {
+  const query = `*[_type == "products" && "featured" in tags] | order(badge asc) {
     _id,
-    name,
+    title,
     price,
-    "slug": slug.current,
+    priceWithoutDiscount,
+    badge,
     "imageURL": image.asset->url,
-    stock,
-    price_id
+    inventory,
+    "slug": slug.current,
+    tags
   }`;
   const products = await client.fetch(query);
   return products;
@@ -43,8 +47,7 @@ export default function FeaturedProducts() {
   }, []);
 
   const handleAddToCart = (product: Product) => {
-    // Ensure the function is only called once
-    if (product.stock > 0) {
+    if (product.inventory > 0) {
       console.log("Product added to cart:", product);
     }
   };
@@ -57,11 +60,25 @@ export default function FeaturedProducts() {
       <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 px-4 overflow-hidden">
         {products.map((product) => (
           <div key={product._id} className="group relative">
-            <div className="aspect-square w-full overflow-hidden rounded-md hover:scale-105 transition-transform duration-300 lg:h-80">
+            <div className="aspect-square w-full overflow-hidden rounded-md hover:scale-105 transition-transform duration-300 lg:h-80 relative">
+              {/* Badge */}
+              {product.badge && (
+                <div
+                  className={`absolute top-2 left-2 px-3 py-1 text-sm font-semibold text-white rounded-md z-10 ${
+                    product.badge.toLowerCase() === "new"
+                      ? "bg-green-500"
+                      : product.badge.toLowerCase() === "sales"
+                      ? "bg-orange-500"
+                      : "bg-gray-500"
+                  }`}
+                >
+                  {product.badge}
+                </div>
+              )}
               <Link href={`/product/${product.slug}`}>
                 <Image
                   src={product.imageURL}
-                  alt={product.name}
+                  alt={product.title}
                   width={600}
                   height={600}
                   className="w-full h-full object-cover object-center"
@@ -70,27 +87,34 @@ export default function FeaturedProducts() {
             </div>
             <div className="mt-4 flex justify-between">
               <div>
-                <h1 className="text-customTeal pt-2">{product.name}</h1>
-                <p className="text-lg font-medium">${product.price}</p>
+                <h1 className="text-customTeal pt-2">{product.title}</h1>
+                <div className="flex items-center gap-2">
+                  <p className="text-lg font-medium">${product.price}</p>
+                  {product.priceWithoutDiscount && (
+                    <p className="text-lg text-gray-500 line-through">
+                      ${product.priceWithoutDiscount}
+                    </p>
+                  )}
+                </div>
               </div>
               <div className="relative">
                 <button
-                  onClick={() => handleAddToCart(product)} // Ensure this logic is correct
-                  disabled={product.stock === 0} // Disable button if out of stock
+                  onClick={() => handleAddToCart(product)}
+                  disabled={product.inventory === 0}
                   className={`${
-                    product.stock === 0 ? "opacity-50 cursor-not-allowed" : ""
+                    product.inventory === 0 ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >
                   <AddToCart2
-                    name={product.name}
-                    description={`High-quality ${product.name}`}
+                    name={product.title}
+                    description={`High-quality ${product.title}`}
                     price={product.price}
                     currency="USD"
                     image={product.imageURL}
                     price_id={product.price_id}
                   />
                 </button>
-                {product.stock === 0 && (
+                {product.inventory === 0 && (
                   <div className="absolute bottom-0 left-0 w-full bg-black text-white text-xs py-3 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     Out of Stock
                   </div>

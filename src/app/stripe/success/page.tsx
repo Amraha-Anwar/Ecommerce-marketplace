@@ -14,9 +14,9 @@ export default function StripeSuccess() {
             Thank you for the shopping We hope you enjoy it
           </p>
           <p>Have a great day!</p>
-          <Link href={"/"}>
+          <Link href={"/generate-tracking"}>
             <button className="bg-customTeal text-white hover:bg-customTeal/80 px-3 py-2 rounded-md mt-5">
-              GO Back
+              Generate Tracking Number!{" "}
             </button>
           </Link>
         </div>

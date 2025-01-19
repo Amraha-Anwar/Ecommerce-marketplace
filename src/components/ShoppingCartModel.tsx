@@ -25,13 +25,49 @@ export default function ShoppingCartModal() {
 
   async function handleCheckout(event: MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
+  
     try {
+      // Step 1: Update stock in Sanity for each product in the cart
+      const updateStockPromises = Object.values(cartDetails ?? {}).map(async (entry) => {
+        const response = await fetch('/api/update-Stock', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            productId: entry.id,
+            quantity: entry.quantity,
+          }),
+        });
+  
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to update stock');
+        }
+  
+        return response.json();
+      });
+  
+      // Wait for all stock updates to complete
+      await Promise.all(updateStockPromises);
+  
+      // Step 2: Redirect to Stripe Checkout
       const result = await redirectToCheckout();
+  
+      // If the redirect fails, throw an error
       if (result?.error) {
-        console.log("result");
+        throw new Error(result.error);
       }
     } catch (error) {
-      console.log("Checkout Error:", error);
+      // Type guard to check if the error is an instance of Error
+      if (error instanceof Error) {
+        console.error("Checkout failed:", error);
+        alert(`Checkout failed: ${error.message}`);
+      } else {
+        // Handle cases where the error is not an Error object
+        console.error("Checkout failed with an unknown error:", error);
+        alert("Checkout failed due to an unknown error.");
+      }
     }
   }
 

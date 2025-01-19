@@ -14,7 +14,7 @@ interface ImageAsset {
 
 interface WishlistItem {
   _id: string;
-  name: string;
+  title: string;
   price: number;
   description: string;
   image:ImageAsset;
@@ -51,12 +51,12 @@ export default function WishlistPage() {
           <div key={item._id} className="border p-4 rounded-md">
             <Image
               src={urlFor(item.image).url()}
-              alt={item.name}
+              alt={item.title}
               className="w-full h-48 object-cover rounded-md"
               width={200}
               height={200}
             />
-            <h2 className="text-xl font-bold mt-4">{item.name}</h2>
+            <h2 className="text-xl font-bold mt-4">{item.title}</h2>
             <p className="text-gray-500 mt-2">${item.price}.00</p>
             <Link
               href={`/product/${item.slug}`}

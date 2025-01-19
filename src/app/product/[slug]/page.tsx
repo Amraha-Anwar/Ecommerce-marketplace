@@ -2,15 +2,17 @@ import { client } from "@/sanity/lib/client";
 import ProductDetails from "@/components/ProductDetails";
 
 async function getData(slug: string) {
-  const query = `*[_type == "product" && slug.current == "${slug}"][0]{
+  const query = `*[_type == "products" && slug.current == "${slug}"][0]{
     _id,
-    name,
+    title,
     price,
+    priceWithoutDiscount,
     description,
-    image,
-    "slug":slug.current,
+    "image": image.asset->, 
+    "slug": slug.current,
     price_id,
-    stock
+    inventory,
+    badge
   }`;
   const data = await client.fetch(query);
   return data;
