@@ -1,4 +1,4 @@
-import { defineType } from "sanity";
+import { defineType, defineField } from "sanity";
 
 export const productSchema = defineType({
   name: "products",
@@ -17,8 +17,8 @@ export const productSchema = defineType({
       options: {
         source: "title",
         maxLength: 200,
-      }
       },
+    },
     {
       name: "price",
       title: "Price",
@@ -70,6 +70,42 @@ export const productSchema = defineType({
           { title: "Gallery", value: "gallery" },
         ],
       },
+    },
+    // Add the reviews field
+    {
+      name: "reviews",
+      title: "Reviews",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({
+              name: "name",
+              title: "Name",
+              type: "string",
+            }),
+            defineField({
+              name: "rating",
+              title: "Rating",
+              type: "number",
+              validation: (Rule) =>
+                Rule.required().min(1).max(5).error("Rating must be between 1 and 5."),
+            }),
+            defineField({
+              name: "comment",
+              title: "Comment",
+              type: "text",
+            }),
+            defineField({
+              name: "date",
+              title: "Date",
+              type: "datetime",
+              initialValue: new Date().toISOString(),
+            }),
+          ],
+        },
+      ],
     },
   ],
 });

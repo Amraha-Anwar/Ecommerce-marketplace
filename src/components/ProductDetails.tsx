@@ -5,6 +5,7 @@ import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
 import AddToCart from "@/components/AddToCart";
 import toast from "react-hot-toast";
+import StarRating from "@/components/StarRating";
 
 interface Product {
   _id: string;
@@ -22,10 +23,28 @@ interface Product {
   price_id: string;
   inventory: number;
   badge?: string;
+  reviews?: Array<{
+    name: string;
+    rating: number;
+    comment: string;
+    date: string;
+  }>;
+}
+
+interface Review {
+  name: string;
+  rating: number;
+  comment: string;
 }
 
 export default function ProductDetails({ product }: { product: Product }) {
   const [wishlist, setWishlist] = useState<Product[]>([]);
+  const [review, setReview] = useState<Review>({
+    name: "",
+    rating: 0,
+    comment: "",
+  });
+  const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
     const savedWishlist = localStorage.getItem("wishlist");
@@ -52,29 +71,99 @@ export default function ProductDetails({ product }: { product: Product }) {
     toast.success(`${product.title} has been added to the cart!`);
   };
 
-  // Debugging: Log the image object
-  useEffect(() => {
-    console.log("Product Image:", product.image);
-  }, [product.image]);
+  const fetchProduct = async () => {
+    try {
+      const response = await fetch(`/api/savedReview?id=${product._id}`);
+      const data = await response.json();
+      return data; // Return the updated product data
+    } catch (error) {
+      console.error("Error fetching product:", error);
+    }
+  };
+
+  const handleSubmitReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!review.name || !review.comment || review.rating === 0) {
+      setMessage("Please fill out all fields and select a rating.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/review", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId: product._id,
+          review: {
+            ...review,
+            date: new Date().toISOString(),
+          },
+        }),
+      });
+
+      if (response.ok) {
+        setMessage("Review submitted successfully!");
+        setReview({
+          name: "",
+          rating: 0,
+          comment: "",
+        });
+        // Re-fetch the product data to update the reviews
+        const updatedProduct = await fetchProduct();
+        if (updatedProduct) {
+          // Update the product state (if needed)
+        }
+      } else {
+        const errorData = await response.json();
+        setMessage(errorData.message || "Failed to submit review.");
+      }
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      setMessage("Failed to submit review.");
+    }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setReview((prevReview) => ({
+      ...prevReview,
+      [name]: value,
+    }));
+  };
+
+  const handleRatingChange = (rating: number) => {
+    setReview((prevReview) => ({
+      ...prevReview,
+      rating,
+    }));
+  };
 
   return (
     <div className="flex flex-col md:flex-row justify-between gap-20 md:gap-10 xl:gap-20">
-      <div className="md:w-[50%]">
-        {product.image && (
+      <div className="md:w-[50%] relative">
+        {product.image ? (
           <Image
             src={urlFor(product.image).url()}
-            alt={product.title}
+            alt={product.title || "Product Image"}
             width={800}
             height={800}
           />
+        ) : (
+          <div className="bg-gray-200 w-full h-[400px] flex items-center justify-center">
+            <span>No Image Available</span>
+          </div>
         )}
-        {/* Display Badge */}
         {product.badge && (
           <div
-            className={`absolute top-2 left-2 text-white text-xs px-2 py-1 rounded-full ${
-              product.badge.toLowerCase() === "new"
+            className={`absolute top-2 left-2 text-white text-xs px-2 py-1 rounded-md ${
+              product.badge === "New"
                 ? "bg-green-600"
-                : product.badge.toLowerCase() === "sales"
+                : product.badge === "Sales"
                 ? "bg-orange-500"
                 : "bg-gray-600"
             }`}
@@ -139,6 +228,65 @@ export default function ProductDetails({ product }: { product: Product }) {
           >
             Add To Wishlist
           </button>
+        )}
+
+        <div className="mt-10">
+          <h2 className="text-2xl font-bold mb-5">Leave a Review</h2>
+          <form onSubmit={handleSubmitReview} className="space-y-4">
+            <div>
+              <StarRating
+                rating={review.rating}
+                onRatingChange={handleRatingChange}
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={review.name}
+                onChange={handleChange}
+                placeholder="Your Name"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+            <div>
+              <textarea
+                name="comment"
+                value={review.comment}
+                onChange={handleChange}
+                placeholder="Your Review"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="bg-customTeal text-white py-2 px-5 rounded-full"
+            >
+              Submit Review
+            </button>
+          </form>
+          {message && <p className="mt-4 text-sm text-gray-600">{message}</p>}
+        </div>
+
+        {product.reviews && product.reviews.length > 0 && (
+          <div className="mt-10">
+            <h2 className="text-2xl font-bold mb-5">Customer Reviews</h2>
+            <div className="space-y-4">
+              {product.reviews.map((review, index) => (
+                <div key={index} className="border-b border-gray-200 pb-4">
+                  <p className="font-semibold">{review.name}</p>
+                  <p className="text-yellow-500">{"★".repeat(review.rating)}</p>
+                  <p className="text-gray-600">{review.comment}</p>
+                  <p className="text-sm text-gray-500">
+                    {new Date(review.date).toLocaleDateString()}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
       </div>
     </div>

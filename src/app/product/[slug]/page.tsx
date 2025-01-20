@@ -12,7 +12,13 @@ async function getData(slug: string) {
     "slug": slug.current,
     price_id,
     inventory,
-    badge
+    badge,
+    reviews[]->{
+      name,
+      rating,
+      comment,
+      date
+    }
   }`;
   const data = await client.fetch(query);
   return data;
