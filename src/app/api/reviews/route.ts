@@ -1,5 +1,5 @@
-import { client } from '@/sanity/lib/client';
-import { NextResponse } from 'next/server';
+import { client } from "@/sanity/lib/client";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   const { productId, name, rating, comment } = await request.json();
@@ -9,13 +9,22 @@ export async function POST(request: Request) {
     const updatedProduct = await client
       .patch(productId) // Use the product ID to find the document
       .setIfMissing({ reviews: [] }) // Initialize reviews array if it doesn't exist
-      .append('reviews', [{ name, rating, comment, date: new Date().toISOString() }]) // Add the new review
+      .append("reviews", [
+        {
+          name,
+          rating,
+          comment,
+          date: new Date().toISOString(),
+        },
+      ])
       .commit(); // Commit the changes
 
     return NextResponse.json({ success: true, product: updatedProduct });
   } catch (error) {
-    // Type assertion to treat error as an Error object
-    const err = error as Error;
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+    console.error("Error submitting review:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to submit review." },
+      { status: 500 }
+    );
   }
 }

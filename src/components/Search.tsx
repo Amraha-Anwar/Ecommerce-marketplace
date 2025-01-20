@@ -6,9 +6,18 @@ import { useState } from "react";
 import { FaSearch } from "react-icons/fa"; // Search icon
 import { ImSpinner8 } from "react-icons/im"; // Loading spinner
 
+// Define the product type
+interface Product {
+  _id: string;
+  title: string;
+  price: number;
+  imageUrl: string;
+  slug: string;
+}
+
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<Product[]>([]); // Use the Product type
   const [isSearching, setIsSearching] = useState(false);
   const [noResults, setNoResults] = useState(false); // State to track no results
   const router = useRouter();

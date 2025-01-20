@@ -20,7 +20,7 @@ interface Product {
     };
   };
   slug: {
-    current:string;
+    current: string;
   };
   price_id: string;
   inventory: number;
@@ -48,12 +48,14 @@ export default function ProductDetails({ product }: { product: Product }) {
   });
   const [message, setMessage] = useState<string>("");
   const [reviews, setReviews] = useState(product.reviews || []);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Handle adding product to wishlist
   const handleAddToWishlist = () => {
     setWishlist((prevWishlist) => {
       const updatedWishlist = [...prevWishlist, product];
       toast.success(`${product.title} has been added to your wishlist!`);
+      console.log("Wishlist:", updatedWishlist);
       return updatedWishlist;
     });
   };
@@ -83,6 +85,9 @@ export default function ProductDetails({ product }: { product: Product }) {
       setMessage("Please fill out all fields and select a rating.");
       return;
     }
+
+    setIsSubmitting(true);
+    setMessage("");
 
     try {
       const response = await fetch("/api/reviews", {
@@ -118,6 +123,8 @@ export default function ProductDetails({ product }: { product: Product }) {
     } catch (error) {
       console.error("Error submitting review:", error);
       setMessage("Failed to submit review.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -231,6 +238,22 @@ export default function ProductDetails({ product }: { product: Product }) {
           </button>
         )}
 
+        {/* Display Wishlist */}
+        <div className="mt-5">
+          <h2 className="text-xl font-bold mb-3">Your Wishlist</h2>
+          {wishlist.length > 0 ? (
+            <ul>
+              {wishlist.map((item, index) => (
+                <li key={index} className="text-gray-600">
+                  {item.title}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">Your wishlist is empty.</p>
+          )}
+        </div>
+
         {/* Review Form */}
         <div className="mt-10">
           <h2 className="text-2xl font-bold mb-5">Leave a Review</h2>
@@ -266,8 +289,9 @@ export default function ProductDetails({ product }: { product: Product }) {
             <button
               type="submit"
               className="bg-customTeal text-white py-2 px-5 rounded-full"
+              disabled={isSubmitting}
             >
-              Submit Review
+              {isSubmitting ? "Submitting..." : "Submit Review"}
             </button>
           </form>
           {message && <p className="mt-4 text-sm text-gray-600">{message}</p>}

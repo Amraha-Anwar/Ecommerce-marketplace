@@ -1,4 +1,4 @@
-import { defineType, defineField } from "sanity";
+import { defineType } from "sanity";
 
 export const productSchema = defineType({
   name: "products",
@@ -72,7 +72,7 @@ export const productSchema = defineType({
       },
     },
     //  the reviews field
-    defineField({
+    {
       name: "reviews",
       title: "Product Reviews",
       type: "array",
@@ -105,6 +105,6 @@ export const productSchema = defineType({
           ],
         },
       ],
-    }),
+    },
   ],
 });
