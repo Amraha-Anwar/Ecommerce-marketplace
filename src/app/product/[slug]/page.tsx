@@ -1,45 +1,56 @@
 import { client } from "@/sanity/lib/client";
 import ProductDetails from "@/components/ProductDetails";
 
-async function getData(slug: string) {
-  const query = `*[_type == "products" && slug.current == "${slug}"][0]{
-    _id,
-    title,
-    price,
-    priceWithoutDiscount,
-    description,
-    "image": image.asset->, 
-    "slug": slug.current,
-    price_id,
-    inventory,
-    badge,
-    reviews[]->{
-      name,
-      rating,
-      comment,
-      date
-    }
-  }`;
-  const data = await client.fetch(query);
-  return data;
+interface Product {
+  _id: string;
+  title: string;
+  price: number;
+  priceWithoutDiscount?: number;
+  description: string;
+  image: {
+    asset: {
+      _ref: string;
+      _type: string;
+    };
+  };
+  slug: {
+    current: string;
+  };
+  price_id: string;
+  inventory: number;
+  badge?: string;
+  reviews?: Array<{
+    name: string;
+    rating: number;
+    comment: string;
+    date: string;
+  }>;
 }
 
-export const dynamic = "force-dynamic";
-
-export default async function ProductDetailPage({
+export default async function ProductPage({
   params,
 }: {
   params: { slug: string };
 }) {
-  const data = await getData(params.slug);
+  // Fetch product data from Sanity
+  const product = await client.fetch<Product>(
+    `*[_type == "products" && slug.current == $slug][0] {
+      ...,
+      reviews[] {
+        name,
+        rating,
+        comment,
+        date
+      }
+    }`,
+    { slug: params.slug }
+  );
 
-  if (!data) {
+  // If product not found, show an error message
+  if (!product) {
     return <div>Product not found</div>;
   }
 
-  return (
-    <div className="max-w-screen-2xl mx-auto overflow-x-hidden px-5 sm:px-10 md:px-10 lg:px-28 py-20">
-      <ProductDetails product={data} />
-    </div>
-  );
+  // Pass the product data to the ProductDetails component
+  return <ProductDetails product={product} />;
 }

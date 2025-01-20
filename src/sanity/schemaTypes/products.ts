@@ -71,41 +71,40 @@ export const productSchema = defineType({
         ],
       },
     },
-    // Add the reviews field
-    {
+    //  the reviews field
+    defineField({
       name: "reviews",
-      title: "Reviews",
+      title: "Product Reviews",
       type: "array",
       of: [
         {
           type: "object",
           fields: [
-            defineField({
+            {
               name: "name",
-              title: "Name",
+              title: "Reviewer Name",
               type: "string",
-            }),
-            defineField({
+            },
+            {
               name: "rating",
               title: "Rating",
               type: "number",
-              validation: (Rule) =>
-                Rule.required().min(1).max(5).error("Rating must be between 1 and 5."),
-            }),
-            defineField({
+              validation: (Rule) => Rule.min(1).max(5).required(),
+            },
+            {
               name: "comment",
               title: "Comment",
               type: "text",
-            }),
-            defineField({
+            },
+            {
               name: "date",
               title: "Date",
               type: "datetime",
               initialValue: new Date().toISOString(),
-            }),
+            },
           ],
         },
       ],
-    },
+    }),
   ],
 });

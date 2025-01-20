@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa"; // Search icon
@@ -86,7 +87,7 @@ export default function Search() {
               className="p-3 hover:bg-gray-100 cursor-pointer"
             >
               <div className="flex items-center gap-3">
-                <img
+                <Image
                   src={product.imageUrl}
                   alt={product.title}
                   className="w-8 h-8 object-cover rounded"
@@ -101,7 +102,7 @@ export default function Search() {
         </div>
       ) : noResults ? (
         <div className="absolute top-10 left-0 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-3">
-          <p className="text-gray-600 text-sm">This product doesn't exist.</p>
+          <p className="text-gray-600 text-sm">{`This product doesn't exist.`}</p>
         </div>
       ) : null}
     </div>

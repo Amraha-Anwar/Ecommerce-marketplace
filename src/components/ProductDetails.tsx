@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
 import AddToCart from "@/components/AddToCart";
@@ -19,7 +19,9 @@ interface Product {
       _type: string;
     };
   };
-  slug: string;
+  slug: {
+    current:string;
+  };
   price_id: string;
   inventory: number;
   badge?: string;
@@ -45,42 +47,35 @@ export default function ProductDetails({ product }: { product: Product }) {
     comment: "",
   });
   const [message, setMessage] = useState<string>("");
+  const [reviews, setReviews] = useState(product.reviews || []);
 
-  useEffect(() => {
-    const savedWishlist = localStorage.getItem("wishlist");
-    if (savedWishlist) {
-      setWishlist(JSON.parse(savedWishlist));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (wishlist.length > 0) {
-      localStorage.setItem("wishlist", JSON.stringify(wishlist));
-    }
-  }, [wishlist]);
-
+  // Handle adding product to wishlist
   const handleAddToWishlist = () => {
     setWishlist((prevWishlist) => {
       const updatedWishlist = [...prevWishlist, product];
+      toast.success(`${product.title} has been added to your wishlist!`);
       return updatedWishlist;
     });
-    toast.success(`${product.title} has been added to your wishlist!`);
   };
 
+  // Handle adding product to cart
   const handleAddToCartMessage = () => {
     toast.success(`${product.title} has been added to the cart!`);
   };
 
+  // Fetch updated product data from Sanity
   const fetchProduct = async () => {
     try {
-      const response = await fetch(`/api/savedReview?id=${product._id}`);
+      const response = await fetch(`/api/product?id=${product._id}`);
       const data = await response.json();
-      return data; // Return the updated product data
+      return data;
     } catch (error) {
       console.error("Error fetching product:", error);
+      return null;
     }
   };
 
+  // Handle submitting a review
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -90,19 +85,20 @@ export default function ProductDetails({ product }: { product: Product }) {
     }
 
     try {
-      const response = await fetch("/api/review", {
+      const response = await fetch("/api/reviews", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           productId: product._id,
-          review: {
-            ...review,
-            date: new Date().toISOString(),
-          },
+          name: review.name,
+          rating: review.rating,
+          comment: review.comment,
         }),
       });
+
+      const data = await response.json();
 
       if (response.ok) {
         setMessage("Review submitted successfully!");
@@ -111,14 +107,13 @@ export default function ProductDetails({ product }: { product: Product }) {
           rating: 0,
           comment: "",
         });
-        // Re-fetch the product data to update the reviews
+        // Re-fetch the product data to get the updated reviews
         const updatedProduct = await fetchProduct();
         if (updatedProduct) {
-          // Update the product state (if needed)
+          setReviews(updatedProduct.reviews || []);
         }
       } else {
-        const errorData = await response.json();
-        setMessage(errorData.message || "Failed to submit review.");
+        setMessage(data.error || "Failed to submit review.");
       }
     } catch (error) {
       console.error("Error submitting review:", error);
@@ -126,6 +121,7 @@ export default function ProductDetails({ product }: { product: Product }) {
     }
   };
 
+  // Handle input changes in the review form
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -136,6 +132,7 @@ export default function ProductDetails({ product }: { product: Product }) {
     }));
   };
 
+  // Handle rating changes in the review form
   const handleRatingChange = (rating: number) => {
     setReview((prevReview) => ({
       ...prevReview,
@@ -145,6 +142,7 @@ export default function ProductDetails({ product }: { product: Product }) {
 
   return (
     <div className="flex flex-col md:flex-row justify-between gap-20 md:gap-10 xl:gap-20">
+      {/* Product Image */}
       <div className="md:w-[50%] relative">
         {product.image ? (
           <Image
@@ -173,6 +171,7 @@ export default function ProductDetails({ product }: { product: Product }) {
         )}
       </div>
 
+      {/* Product Details */}
       <div className="md:w-[50%]">
         <h1 className="text-customBlue text-3xl sm:text-5xl md:text-4xl xl:text-7xl font-bold -mt-10 md:-mt-0">
           {product.title}
@@ -192,6 +191,7 @@ export default function ProductDetails({ product }: { product: Product }) {
           {product.description}
         </h2>
 
+        {/* Availability */}
         {product.inventory > 0 ? (
           <p className="text-gray-500 font-semibold mb-3 text-sm">
             Availability:
@@ -210,6 +210,7 @@ export default function ProductDetails({ product }: { product: Product }) {
           </p>
         )}
 
+        {/* Add to Cart or Wishlist */}
         {product.inventory > 0 ? (
           <AddToCart
             currency="USD"
@@ -230,6 +231,7 @@ export default function ProductDetails({ product }: { product: Product }) {
           </button>
         )}
 
+        {/* Review Form */}
         <div className="mt-10">
           <h2 className="text-2xl font-bold mb-5">Leave a Review</h2>
           <form onSubmit={handleSubmitReview} className="space-y-4">
@@ -271,11 +273,12 @@ export default function ProductDetails({ product }: { product: Product }) {
           {message && <p className="mt-4 text-sm text-gray-600">{message}</p>}
         </div>
 
-        {product.reviews && product.reviews.length > 0 && (
+        {/* Customer Reviews */}
+        {reviews.length > 0 && (
           <div className="mt-10">
             <h2 className="text-2xl font-bold mb-5">Customer Reviews</h2>
             <div className="space-y-4">
-              {product.reviews.map((review, index) => (
+              {reviews.map((review, index) => (
                 <div key={index} className="border-b border-gray-200 pb-4">
                   <p className="font-semibold">{review.name}</p>
                   <p className="text-yellow-500">{"★".repeat(review.rating)}</p>

@@ -5,23 +5,21 @@ interface StarRatingProps {
   onRatingChange: (rating: number) => void;
 }
 
-const StarRating: React.FC<StarRatingProps> = ({ rating, onRatingChange }) => {
+export default function StarRating({ rating, onRatingChange }: StarRatingProps) {
   return (
     <div className="flex space-x-1">
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
           type="button"
+          onClick={() => onRatingChange(star)}
           className={`text-2xl ${
             star <= rating ? "text-yellow-500" : "text-gray-300"
           }`}
-          onClick={() => onRatingChange(star)}
         >
           ★
         </button>
       ))}
     </div>
   );
-};
-
-export default StarRating;
+}
