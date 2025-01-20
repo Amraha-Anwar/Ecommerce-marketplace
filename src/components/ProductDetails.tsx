@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Add useEffect
 import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
 import AddToCart from "@/components/AddToCart";
@@ -40,7 +40,15 @@ interface Review {
 }
 
 export default function ProductDetails({ product }: { product: Product }) {
-  const [wishlist, setWishlist] = useState<Product[]>([]);
+  // Initialize wishlist state from localStorage
+  const [wishlist, setWishlist] = useState<Product[]>(() => {
+    if (typeof window !== "undefined") {
+      const savedWishlist = localStorage.getItem("wishlist");
+      return savedWishlist ? JSON.parse(savedWishlist) : [];
+    }
+    return [];
+  });
+
   const [review, setReview] = useState<Review>({
     name: "",
     rating: 0,
@@ -50,8 +58,23 @@ export default function ProductDetails({ product }: { product: Product }) {
   const [reviews, setReviews] = useState(product.reviews || []);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Save wishlist to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    }
+  }, [wishlist]);
+
   // Handle adding product to wishlist
   const handleAddToWishlist = () => {
+    // Check if the product is already in the wishlist
+    const isProductInWishlist = wishlist.some((item) => item._id === product._id);
+
+    if (isProductInWishlist) {
+      toast.error(`${product.title} is already in your wishlist!`);
+      return;
+    }
+
     setWishlist((prevWishlist) => {
       const updatedWishlist = [...prevWishlist, product];
       toast.success(`${product.title} has been added to your wishlist!`);
