@@ -27,8 +27,8 @@ export default function MiddleNavbar() {
   }, []);
 
   return (
-    <nav className="w-full bg-customGray shadow-sm">
-      <div className="max-w-screen-2xl mx-auto h-16 lg:h-20 px-3 lg:px-28 flex justify-between items-center">
+    <nav className="max-w-screen-2xl mx-auto bg-customGray shadow-sm">
+      <div className=" h-16 lg:h-20 px-3 lg:px-28 flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center gap-2">
           <Image

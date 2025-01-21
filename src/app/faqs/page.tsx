@@ -1,4 +1,5 @@
 import { Plus } from "lucide-react";
+import TidioChat from "@/components/TidioChat"; 
 
 export default function Faqs() {
   return (
@@ -120,6 +121,9 @@ export default function Faqs() {
             </div>
           </div>
         </div>
+
+        {/* Tidio Chatbot Script */}
+        <TidioChat />
       </main>
     </>
   );

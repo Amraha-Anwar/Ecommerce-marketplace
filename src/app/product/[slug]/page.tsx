@@ -19,12 +19,6 @@ interface Product {
   price_id: string;
   inventory: number;
   badge?: string;
-  reviews?: Array<{
-    name: string;
-    rating: number;
-    comment: string;
-    date: string;
-  }>;
 }
 
 export default async function ProductPage({
@@ -36,12 +30,6 @@ export default async function ProductPage({
   const product = await client.fetch<Product>(
     `*[_type == "products" && slug.current == $slug][0] {
       ...,
-      reviews[] {
-        name,
-        rating,
-        comment,
-        date
-      }
     }`,
     { slug: params.slug }
   );
@@ -52,5 +40,5 @@ export default async function ProductPage({
   }
 
   // Pass the product data to the ProductDetails component
-  return <ProductDetails product={product} />;
+  return <ProductDetails initialProduct={product} />;
 }

@@ -24,6 +24,7 @@ async function getFeaturedProducts() {
     title,
     price,
     priceWithoutDiscount,
+    price_id,
     badge,
     "imageURL": image.asset->url,
     inventory,

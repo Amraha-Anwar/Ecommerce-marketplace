@@ -8,6 +8,7 @@ import CartProvider from "@/components/Provider";
 import ShoppingCartModal from "@/components/ShoppingCartModel";
 import { Toaster } from "react-hot-toast";
 import { Montserrat } from "next/font/google";
+// import TidioChat from "@/components/TidioChat"; 
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -26,9 +27,8 @@ export default function RootLayout({
 }>) {
   return (
     <CartProvider>
-
-    <html lang="en" className={montserrat.className}>
-      <body>
+      <html lang="en" className={montserrat.className}>
+        <body>
           {/* Adding Toaster globally */}
           <Toaster position="top-center" reverseOrder={false} />
 
@@ -42,11 +42,15 @@ export default function RootLayout({
 
           {/* Main content */}
           {children}
-
+          {/* Tidio Chatbot Script */}
+          {/* <TidioChat /> */}
+          {/* Footer */}
           <Footer />
-      </body>
-    </html>
-    </CartProvider>
 
+          
+          
+        </body>
+      </html>
+    </CartProvider>
   );
 }
