@@ -71,7 +71,9 @@ export default function ReviewForm({
         <textarea
           placeholder="Your Review"
           value={formData.comment}
-          onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, comment: e.target.value })
+          }
           required
           className="w-full px-3 py-2 border  border-gray-300 rounded-md"
         />
@@ -83,7 +85,9 @@ export default function ReviewForm({
       >
         {submitting ? "Submitting..." : "Submit Review"}
       </button>
-      {success && <p className="text-green-500">Review submitted successfully!</p>}
+      {success && (
+        <p className="text-green-500">Review submitted successfully!</p>
+      )}
       {error && <p className="text-red-500">{error}</p>}
     </form>
   );

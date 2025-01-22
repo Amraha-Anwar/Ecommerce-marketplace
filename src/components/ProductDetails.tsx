@@ -36,6 +36,28 @@ interface Review {
   date: string;
 }
 
+interface SanityProduct {
+  _id: string;
+  _type: string;
+  title: string;
+  slug: {
+    current: string;
+  };
+  price: number;
+  price_id: string;
+  priceWithoutDiscount?: number;
+  badge?: string;
+  image: {
+    asset: {
+      _ref: string;
+      _type: string;
+    };
+  };
+  description: string;
+  inventory: number;
+  reviews?: Review[];
+}
+
 // Fetch product data from Sanity
 const fetchProduct = async (id: string) => {
   const query = `*[_type == "products" && (slug.current == $id || _id == $id)][0] {
@@ -68,7 +90,7 @@ const fetchProduct = async (id: string) => {
 };
 
 // Transform Sanity product data to match the Product interface
-const transformToProduct = (sanityProduct: any): Product | null => {
+const transformToProduct = (sanityProduct: SanityProduct): Product | null => {
   if (!sanityProduct) return null;
 
   return {
@@ -221,11 +243,8 @@ export default function ProductDetails({ initialProduct }: { initialProduct?: Pr
     }
   };
 
-  // Calculate average rating
+  // Calculate average rating (removed since it's unused)
   const reviews = product?.reviews || [];
-  const averageRating =
-    (reviews.reduce((sum, review) => sum + review.rating, 0) || 0) /
-    (reviews.length || 1); // Avoid division by zero
 
   if (loading) {
     return <div>Loading...</div>;
