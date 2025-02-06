@@ -16,7 +16,7 @@ type EmailRequestBody = {
 
 export async function POST(request: Request) {
   try {
-    console.log("Request received"); 
+    console.log("Request received");
     const { email, name, cartItems, totalPrice }: EmailRequestBody =
       await request.json();
     console.log("Parsed request body:", { email, name, cartItems, totalPrice });
@@ -92,9 +92,9 @@ export async function POST(request: Request) {
       `,
     };
 
-    console.log("Attempting to send email..."); 
+    console.log("Attempting to send email...");
     await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully"); 
+    console.log("Email sent successfully");
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error sending email:", error);
