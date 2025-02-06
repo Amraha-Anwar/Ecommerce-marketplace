@@ -1,3 +1,7 @@
+import TopNavbar from "@/components/TopNavbar";
+import MiddleNavbar from "@/components/MiddleNavbar";
+import Footer from "@/components/Footer";
+import BottomNavbar from "@/components/BottomNavbar";
 import { GoClockFill } from "react-icons/go";
 import { MdPhone } from "react-icons/md";
 import { MdLocationOn } from "react-icons/md";
@@ -8,6 +12,9 @@ import { MdSupportAgent } from "react-icons/md";
 export default function Contact() {
   return (
     <>
+      <TopNavbar />
+      <MiddleNavbar />
+      <BottomNavbar />
       <main className="max-w-screen-2xl mx-auto lg:px-28">
         <h1 className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-5xl text-black text-center pt-14">
           Get In Touch With Us
@@ -170,6 +177,7 @@ export default function Contact() {
         </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

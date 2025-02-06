@@ -1,9 +1,16 @@
+import TopNavbar from "@/components/TopNavbar";
+import Footer from "@/components/Footer";
+import MiddleNavbar from "@/components/MiddleNavbar";
+import BottomNavbar from "@/components/BottomNavbar";
 import { Plus } from "lucide-react";
 import TidioChat from "@/components/TidioChat"; 
 
 export default function Faqs() {
   return (
     <>
+      <TopNavbar />
+      <MiddleNavbar />
+      <BottomNavbar />
       <main className="max-w-screen-2xl mx-auto px-3 sm:px-6 lg:px-10">
         <h1 className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-5xl text-customBlue text-center pt-14">
           Questions Looks Here
@@ -125,6 +132,7 @@ export default function Faqs() {
         {/* Tidio Chatbot Script */}
         <TidioChat />
       </main>
+      <Footer />
     </>
   );
 }

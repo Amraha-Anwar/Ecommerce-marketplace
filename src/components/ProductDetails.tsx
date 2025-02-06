@@ -427,5 +427,6 @@ export default function ProductDetails({ initialProduct }: { initialProduct?: Pr
         </div>
       </div>
     </div>
+   
   );
 }
