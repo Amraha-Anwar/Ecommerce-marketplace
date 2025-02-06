@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
+import {
+  ClerkProvider,
+} from "@clerk/nextjs";
 import "./globals.css";
-import TopNavbar from "@/components/TopNavbar";
-import MiddleNavbar from "@/components/MiddleNavbar";
-import BottomNavbar from "@/components/BottomNavbar";
-import Footer from "@/components/Footer";
 import CartProvider from "@/components/Provider";
 import ShoppingCartModal from "@/components/ShoppingCartModel";
 import { Toaster } from "react-hot-toast";
 import { Montserrat } from "next/font/google";
-// import TidioChat from "@/components/TidioChat"; 
+import TidioChat from "@/components/TidioChat";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -26,31 +25,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <CartProvider>
-      <html lang="en" className={montserrat.className}>
-        <body>
-          {/* Adding Toaster globally */}
-          <Toaster position="top-center" reverseOrder={false} />
+    <ClerkProvider>
+      <CartProvider>
+        <html lang="en" className={montserrat.className}>
+          <body>
 
-          {/* Navbar components */}
-          <TopNavbar />
-          <MiddleNavbar />
-          <BottomNavbar />
+            {/* Tidio Chat */}
+            <TidioChat />
 
-          {/* Shopping cart modal */}
-          <ShoppingCartModal />
+            {/* Toaster for notifications */}
+            <Toaster position="top-center" reverseOrder={false} />
 
-          {/* Main content */}
-          {children}
-          {/* Tidio Chatbot Script */}
-          {/* <TidioChat /> */}
-          {/* Footer */}
-          <Footer />
+            {/* Shopping cart modal */}
+            <ShoppingCartModal />
 
-          
-          
-        </body>
-      </html>
-    </CartProvider>
+            {/* Main content */}
+            {children}
+          </body>
+        </html>
+      </CartProvider>
+    </ClerkProvider>
   );
 }

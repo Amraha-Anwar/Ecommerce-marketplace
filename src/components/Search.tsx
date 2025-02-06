@@ -100,6 +100,8 @@ export default function Search() {
                   src={product.imageUrl}
                   alt={product.title}
                   className="w-8 h-8 object-cover rounded"
+                  width={32}
+                  height={32}
                 />
                 <div>
                   <h3 className="font-semibold text-sm">{product.title}</h3>

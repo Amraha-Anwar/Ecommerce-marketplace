@@ -1,5 +1,12 @@
+
+import TopNavbar from "@/components/TopNavbar";
+import MiddleNavbar from "@/components/MiddleNavbar";
+import BottomNavbar from "@/components/BottomNavbar";
+import Footer from "@/components/Footer";
 import { client } from "@/sanity/lib/client";
 import ProductDetails from "@/components/ProductDetails";
+import DynamicFeatured from "@/components/DynamicFeatured"; 
+
 
 interface Product {
   _id: string;
@@ -39,6 +46,16 @@ export default async function ProductPage({
     return <div>Product not found</div>;
   }
 
-  // Pass the product data to the ProductDetails component
-  return <ProductDetails initialProduct={product} />;
+  return (
+    <>
+    <TopNavbar />
+    <MiddleNavbar />
+    <BottomNavbar />
+    <div>
+      <ProductDetails initialProduct={product} />
+      <DynamicFeatured /> 
+    </div>
+    <Footer />
+    </>
+  );
 }

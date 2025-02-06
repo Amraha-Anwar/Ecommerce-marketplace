@@ -1,3 +1,8 @@
+
+import TopNavbar from "@/components/TopNavbar";
+import Footer from "@/components/Footer";
+import MiddleNavbar from "@/components/MiddleNavbar";
+import BottomNavbar from "@/components/BottomNavbar";
 import Link from "next/link";
 import Image from "next/image";
 import { TbTruckDelivery } from "react-icons/tb";
@@ -8,6 +13,9 @@ import { PiPlant } from "react-icons/pi";
 export default function About() {
   return (
     <>
+      <TopNavbar />
+      <MiddleNavbar />
+      <BottomNavbar />
       <main className="max-w-screen-2xl mx-auto overflow-x-hidden lg:px-28">
         {/* main div which will flex 2 header divs */}
         <div className="flex justify-between gap-5 pt-20">
@@ -105,6 +113,7 @@ export default function About() {
           </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

@@ -1,5 +1,9 @@
 "use client";
 
+import TopNavbar from "@/components/TopNavbar";
+import Footer from "@/components/Footer";
+import MiddleNavbar from "@/components/MiddleNavbar";
+import BottomNavbar from "@/components/BottomNavbar";
 import { client } from "@/sanity/lib/client";
 import Image from "next/image";
 import Link from "next/link";
@@ -56,6 +60,9 @@ export default function OurProducts() {
 
   return (
     <>
+      <TopNavbar />
+      <MiddleNavbar />
+      <BottomNavbar />
       <main className="max-w-screen-2xl mx-auto overflow-x-hidden py-10 lg:px-28">
         <h1 className="text-customBlue text-center xl:text-left lg:text-3xl font-bold text-xl sm:text-2xl pb-3 lg:pb-10">
           Buy Whatever You Like
@@ -109,6 +116,7 @@ export default function OurProducts() {
           </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 }
