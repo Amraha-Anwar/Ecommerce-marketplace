@@ -82,8 +82,8 @@ export default function MiddleNavbar() {
             <div className="flex items-center gap-3">
               {/* Dashboard Button with Icon */}
               <Link href="/dashboard">
-                <button className="p-2 bg-white rounded-lg hover:shadow-md transition-shadow duration-200 hover:scale-105">
-                  <LayoutDashboard className="w-5 h-5 text-gray-700 hover:text-customTeal" />
+                <button className="p-2 bg-customDarkBlue rounded-lg shadow-md transition-shadow duration-200 hover:scale-105">
+                  <LayoutDashboard className="w-5 h-5 text-white" />
                 </button>
               </Link>
 
@@ -147,7 +147,7 @@ export default function MiddleNavbar() {
                   <li>
                     <Link href="/dashboard">
                       <button className="flex items-center gap-2 text-gray-600 hover:text-customTeal transition-colors duration-200 hover:pl-2">
-                        <LayoutDashboard className="w-5 h-5" />
+                        <LayoutDashboard className="w-5 h-5 text-customDarkBlue" />
                         <span>Dashboard</span>
                       </button>
                     </Link>

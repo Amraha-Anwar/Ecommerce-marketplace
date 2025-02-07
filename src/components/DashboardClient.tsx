@@ -144,9 +144,9 @@ export default function DashboardClient() {
                     <td className="p-2">
                       <span
                         className={`px-2 py-1 rounded text-white ${
-                          order.status === "Delivered"
+                          order.status === "delivered"
                             ? "bg-green-500"
-                            : order.status === "Processing"
+                            : order.status === "processing"
                             ? "bg-yellow-500"
                             : "bg-red-500"
                         }`}
