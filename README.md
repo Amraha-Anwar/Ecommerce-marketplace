@@ -1,3 +1,15 @@
+📌 Important Notice: Incorrect Contributor Display 📌
+Issue: The "Contributors" section in this repository mistakenly displays an unintended contributor (ZubairAnwar). This is due to an unintentional Git configuration issue and does not reflect actual contributions to the project.
+
+Clarification:
+
+The code, commits, and project work in this repository have been completed solely by [Amraha-Anwar].
+No contributions, code changes, or commits have been made by the incorrectly listed user.
+
+----------------------------------------------------------------------------------------------
+
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
