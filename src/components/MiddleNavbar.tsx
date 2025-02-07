@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart, Menu } from "lucide-react";
+import { Heart, Menu, LayoutDashboard } from "lucide-react"; // Added LayoutDashboard icon
 import Image from "next/image";
 import Link from "next/link";
 import { BsCartDash } from "react-icons/bs";
@@ -14,8 +14,8 @@ import { FaUser } from "react-icons/fa6";
 export default function MiddleNavbar() {
   const { cartCount, handleCartClick } = useShoppingCart();
   const [wishlistCount, setWishlistCount] = useState(0);
-  const { user:_user } = useUser(); 
-  
+  const { user: _user } = useUser();
+
   useEffect(() => {
     const updateWishlistCount = () => {
       const savedWishlist = localStorage.getItem("wishlist");
@@ -49,7 +49,7 @@ export default function MiddleNavbar() {
           </h1>
         </div>
 
-        {/* Large Screens: Wishlist, Cart, Search Bar, and Avatar/Sign-In Button */}
+        {/* Large Screens */}
         <div className="max-sm:hidden flex items-center gap-x-3">
           <Search />
 
@@ -65,7 +65,10 @@ export default function MiddleNavbar() {
           </div>
 
           <div className="bg-white rounded-lg lg:px-3 px-1 py-1 hover:shadow-md transition-shadow duration-200">
-            <button className="relative flex items-center gap-2 sm:gap-1 rounded-[10px] px-2 py-2 lg:px-3 lg:py-2 hover:scale-105 transition-transform duration-200" onClick={() => handleCartClick()}>
+            <button
+              className="relative flex items-center gap-2 sm:gap-1 rounded-[10px] px-2 py-2 lg:px-3 lg:py-2 hover:scale-105 transition-transform duration-200"
+              onClick={() => handleCartClick()}
+            >
               <BsCartDash className="w-5 h-6 hover:scale-110 transition-transform duration-200" />
               <span className="hidden sm:block">Cart</span>
               <span className="absolute -top-2 -right-2 bg-customDarkBlue text-white rounded-full px-2 py-1 text-xs font-bold hover:scale-105 transition-transform duration-200">
@@ -74,9 +77,19 @@ export default function MiddleNavbar() {
             </button>
           </div>
 
-          {/* Signed-in users: Show default Clerk UserButton */}
+          {/* Signed-in users: Show Dashboard button and Clerk UserButton */}
           <SignedIn>
-            <UserButton afterSignOutUrl="/" />
+            <div className="flex items-center gap-3">
+              {/* Dashboard Button with Icon */}
+              <Link href="/dashboard">
+                <button className="p-2 bg-white rounded-lg hover:shadow-md transition-shadow duration-200 hover:scale-105">
+                  <LayoutDashboard className="w-5 h-5 text-gray-700 hover:text-customTeal" />
+                </button>
+              </Link>
+
+              {/* Clerk UserButton */}
+              <UserButton afterSignOutUrl="/" />
+            </div>
           </SignedIn>
 
           {/* Signed-out users: Show styled sign-in button */}
@@ -89,7 +102,7 @@ export default function MiddleNavbar() {
           </SignedOut>
         </div>
 
-        {/* Small Screens: Search Bar, Avatar/Sign-In Button, and Sheet Menu */}
+        {/* Small Screens */}
         <div className="sm:hidden flex items-center gap-x-3">
           <Search />
 
@@ -102,7 +115,7 @@ export default function MiddleNavbar() {
           <SignedOut>
             <SignInButton>
               <button className="px-2 py-2 rounded-full bg-gradient-to-r from-customTeal to-customDarkBlue text-white font-semibold hover:scale-105 hover:shadow-md transition-all duration-200 active:scale-95">
-              <FaUser />
+                <FaUser />
               </button>
             </SignInButton>
           </SignedOut>
@@ -114,26 +127,54 @@ export default function MiddleNavbar() {
             </SheetTrigger>
             <SheetContent side="right" className="pt-12 font-semibold">
               <ul className="space-y-4">
-                <li><Link href="/">Home</Link></li>
-                <li><Link href="/shopPage">Shop</Link></li>
-                <li><Link href="/products">Product</Link></li>
-                <li><Link href="/about">About</Link></li>
-                <li><Link href="/contact">Contact</Link></li>
+                <li>
+                  <Link href="/">Home</Link>
+                </li>
+                <li>
+                  <Link href="/shopPage">Shop</Link>
+                </li>
+                <li>
+                  <Link href="/products">Product</Link>
+                </li>
+                <li>
+                  <Link href="/about">About</Link>
+                </li>
+                <li>
+                  <Link href="/contact">Contact</Link>
+                </li>
+                {/* Dashboard Link for Mobile */}
+                <SignedIn>
+                  <li>
+                    <Link href="/dashboard">
+                      <button className="flex items-center gap-2 text-gray-600 hover:text-customTeal transition-colors duration-200 hover:pl-2">
+                        <LayoutDashboard className="w-5 h-5" />
+                        <span>Dashboard</span>
+                      </button>
+                    </Link>
+                  </li>
+                </SignedIn>
               </ul>
               <div className="mt-6">
                 <Link href="/wishlist">
                   <button className="flex items-center gap-2 text-gray-600 hover:text-customTeal transition-colors duration-200 hover:pl-2">
                     <Heart className="w-5 h-5" />
                     <span>Wishlist</span>
-                    <span className="bg-customDarkBlue text-white rounded-full px-2 py-1 text-xs font-bold">{wishlistCount}</span>
+                    <span className="bg-customDarkBlue text-white rounded-full px-2 py-1 text-xs font-bold">
+                      {wishlistCount}
+                    </span>
                   </button>
                 </Link>
               </div>
               <div className="mt-4">
-                <button className="flex items-center gap-2 text-gray-600 hover:text-customTeal transition-colors duration-200 hover:pl-2" onClick={() => handleCartClick()}>
+                <button
+                  className="flex items-center gap-2 text-gray-600 hover:text-customTeal transition-colors duration-200 hover:pl-2"
+                  onClick={() => handleCartClick()}
+                >
                   <BsCartDash className="w-5 h-6" />
                   <span>Cart</span>
-                  <span className="bg-customDarkBlue text-white rounded-full px-2 py-1 text-xs font-bold">{cartCount || 0}</span>
+                  <span className="bg-customDarkBlue text-white rounded-full px-2 py-1 text-xs font-bold">
+                    {cartCount || 0}
+                  </span>
                 </button>
               </div>
             </SheetContent>
