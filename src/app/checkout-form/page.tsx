@@ -77,10 +77,10 @@ export default function CheckoutFormPage() {
           name: `${formData.firstName} ${formData.lastName}`,
           cartItems: Object.values(cartDetails ?? {}).map((item) => ({
             name: item.name,
-            price: item.price / 100,
+            price: item.price, // Remove division by 100
             quantity: item.quantity,
           })),
-          totalPrice: totalPrice ? totalPrice / 100 : 0,
+          totalPrice: totalPrice ?? 0, // Remove division by 100
         }),
       });
 
@@ -98,10 +98,10 @@ export default function CheckoutFormPage() {
           name: `${formData.firstName} ${formData.lastName}`,
           cartItems: Object.values(cartDetails ?? {}).map((item) => ({
             name: item.name,
-            price: item.price / 100,
+            price: item.price, // Remove division by 100
             quantity: item.quantity,
           })),
-          totalPrice: totalPrice ? totalPrice / 100 : 0,
+          totalPrice: totalPrice ?? 0, // Remove division by 100
         })
       );
 
