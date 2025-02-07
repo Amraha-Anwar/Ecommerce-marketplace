@@ -77,10 +77,10 @@ export default function CheckoutFormPage() {
           name: `${formData.firstName} ${formData.lastName}`,
           cartItems: Object.values(cartDetails ?? {}).map((item) => ({
             name: item.name,
-            price: (item.price / 100).toFixed(2),
+            price: item.price / 100,
             quantity: item.quantity,
           })),
-          totalPrice: totalPrice ? (totalPrice / 100).toFixed(2) : "0.00",
+          totalPrice: totalPrice ? totalPrice / 100 : 0,
         }),
       });
 
@@ -98,10 +98,10 @@ export default function CheckoutFormPage() {
           name: `${formData.firstName} ${formData.lastName}`,
           cartItems: Object.values(cartDetails ?? {}).map((item) => ({
             name: item.name,
-            price: (item.price / 100).toFixed(2),
+            price: item.price / 100,
             quantity: item.quantity,
           })),
-          totalPrice: totalPrice ? (totalPrice / 100).toFixed(2) : "0.00",
+          totalPrice: totalPrice ? totalPrice / 100 : 0,
         })
       );
 
